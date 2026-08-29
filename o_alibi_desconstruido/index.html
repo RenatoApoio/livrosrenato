@@ -302,14 +302,13 @@
     background: linear-gradient(90deg, rgba(12,9,8,0.55) 0%, rgba(12,9,8,0) 14%), linear-gradient(0deg, rgba(12,9,8,0.5) 0%, rgba(12,9,8,0) 22%);
     pointer-events: none;
   }
+  .hero-image-sticky{ background: var(--bg); }
   .hero-image-sticky img{
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: 50% 22%;
-    transform: scale(1.08) translateY(0px);
-    will-change: transform;
+    object-fit: contain;
+    object-position: center;
   }
   .hero-image-sticky .frame-mark{
     position: absolute;
@@ -329,7 +328,6 @@
     .hero-copy-inner{ max-width: none; }
     .hero-image-col{ order: 2; min-height: 0; }
     .hero-image-sticky{ position: relative; height: 68vh; height: 68dvh; }
-    .hero-image-sticky img{ transform: none; }
     .epigraph{ order: 3; margin-top: 0; padding: 36px clamp(20px, 5vw, 40px) 48px; }
     .epigraph p{ margin: 0 0 1.1em; }
     .scroll-cue{ display: none; }
@@ -673,29 +671,6 @@
     }catch(err){
       document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
     }
-
-    try{
-      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var img = document.querySelector('.hero-image-sticky img');
-      var heroCol = document.querySelector('.hero-image-col');
-      if(img && heroCol && !reduceMotion && window.innerWidth > 980){
-        var ticking = false;
-        function onScroll(){
-          if(ticking) return;
-          ticking = true;
-          requestAnimationFrame(function(){
-            var rect = heroCol.getBoundingClientRect();
-            var total = rect.height - window.innerHeight;
-            var progressed = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 0;
-            var drift = progressed * 46;
-            img.style.transform = 'scale(1.08) translateY(' + (-drift) + 'px)';
-            ticking = false;
-          });
-        }
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-      }
-    }catch(err){}
 
     try{
       var sections = document.querySelectorAll('main section[id]');
