@@ -30,7 +30,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0a1120;
@@ -44,9 +44,9 @@
     --body-text: #c7d3e6;
     --muted: #8b97ac;
     --faint: #57647d;
-    --font-display: "Sora", "Segoe UI", sans-serif;
-    --font-body: "Manrope", "Segoe UI", sans-serif;
-    --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    --font-display: "Inter", "Segoe UI", sans-serif;
+    --font-body: "Inter", "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
   }
 
   *{ box-sizing: border-box; }
@@ -103,11 +103,25 @@
   }
   .eyebrow::before{ content: "//"; color: var(--faint); }
 
-  /* header */
+  /* header — sticky with glassmorphism on scroll */
   header{
-    position: relative;
-    z-index: 10;
-    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 22px 0;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: background 320ms ease, border-color 320ms ease, backdrop-filter 320ms ease, padding 240ms ease;
+  }
+  header.scrolled{
+    padding: 14px 0;
+    background: rgba(10,17,32,0.68);
+    border-bottom: 1px solid var(--hairline);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 8px 32px -16px rgba(0,0,0,0.5);
   }
   header .wrap{
     display: flex;
@@ -122,6 +136,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
   }
   .wordmark .dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
   .header-cta{
@@ -132,9 +147,16 @@
     border: 1px solid var(--hairline);
     padding: 9px 16px;
     border-radius: 6px;
-    transition: border-color 160ms ease, color 160ms ease;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 180ms ease, color 180ms ease, transform 180ms ease, background 180ms ease;
   }
-  .header-cta:hover{ border-color: var(--accent); color: var(--accent-bright); }
+  .header-cta:hover{
+    border-color: var(--accent);
+    color: var(--accent-bright);
+    background: rgba(255,122,82,0.08);
+    transform: translateY(-1px);
+  }
   @media (max-width: 600px){ .header-cta{ display: none; } }
 
   /* hero */
@@ -186,7 +208,8 @@
     box-shadow: 0 14px 34px -14px rgba(255,122,82,0.55);
     transition: transform 180ms ease, box-shadow 180ms ease;
   }
-  .cta:hover{ transform: translateY(-2px); box-shadow: 0 18px 40px -14px rgba(255,122,82,0.7); }
+  .cta:hover{ transform: translateY(-2px) scale(1.03); box-shadow: 0 20px 44px -14px rgba(255,122,82,0.75); }
+  .cta:active{ transform: translateY(0) scale(0.98); }
   .cta .arrow{ transition: transform 180ms ease; }
   .cta:hover .arrow{ transform: translateX(3px); }
 
@@ -227,6 +250,11 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 40px 80px -30px rgba(0,0,0,0.6);
+    transition: transform 320ms ease, box-shadow 320ms ease;
+  }
+  .terminal:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 50px 90px -28px rgba(0,0,0,0.7);
   }
   .terminal-bar{
     display: flex;
@@ -327,7 +355,10 @@
     display: flex;
     gap: 16px;
     align-items: flex-start;
+    transition: background 200ms ease;
   }
+  .curriculum-item:hover{ background: var(--surface-2); }
+  .curriculum-item:hover .check{ background: rgba(255,122,82,0.24); transform: scale(1.06); }
   .curriculum-item .check{
     flex: none;
     width: 24px; height: 24px;
@@ -339,6 +370,7 @@
     font-size: 0.8rem;
     font-family: var(--font-mono);
     margin-top: 2px;
+    transition: background 200ms ease, transform 200ms ease;
   }
   .curriculum-item p{ margin: 0; color: var(--body-text); font-size: 0.98rem; line-height: 1.6; }
   .curriculum-item p strong{ color: var(--ivory); }
@@ -355,9 +387,14 @@
     border: 1px solid var(--hairline);
     border-radius: 12px;
     padding: 26px 22px;
-    transition: border-color 200ms ease, transform 200ms ease;
+    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
   }
-  .usecase:hover{ border-color: var(--accent); transform: translateY(-3px); }
+  .usecase:hover{
+    border-color: var(--accent);
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 20px 40px -22px rgba(255,122,82,0.4);
+    background: var(--surface-2);
+  }
   .usecase-icon{
     display: flex;
     align-items: center;
@@ -369,7 +406,9 @@
     border: 1px solid rgba(255,122,82,0.32);
     color: var(--accent-bright);
     margin-bottom: 14px;
+    transition: transform 220ms ease, background 220ms ease;
   }
+  .usecase:hover .usecase-icon{ transform: scale(1.08) rotate(-4deg); background: rgba(255,122,82,0.2); }
   .usecase-icon svg{ width: 22px; height: 22px; }
   .usecase .idx{ font-family: var(--font-mono); font-size: 0.76rem; color: var(--faint); }
   .usecase h3{
@@ -424,6 +463,11 @@
     border: 1px solid var(--hairline);
     box-shadow: 0 20px 40px -18px rgba(0,0,0,0.6);
     margin: 0 0 28px;
+    transition: transform 260ms ease, box-shadow 260ms ease;
+  }
+  .final-cover:hover{
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 26px 50px -18px rgba(255,122,82,0.35);
   }
   .final-cta p.closing{
     max-width: 60ch;
@@ -453,8 +497,19 @@
     color: var(--faint);
   }
 
-  .reveal{ opacity: 0; transform: translateY(16px); transition: opacity 650ms ease, transform 650ms ease; }
+  .reveal{ opacity: 0; transform: translateY(24px); transition: opacity 700ms cubic-bezier(.16,.8,.3,1), transform 700ms cubic-bezier(.16,.8,.3,1); }
   .reveal.in{ opacity: 1; transform: none; }
+  .curriculum-item.reveal:nth-child(1){ transition-delay: 0ms; }
+  .curriculum-item.reveal:nth-child(2){ transition-delay: 60ms; }
+  .curriculum-item.reveal:nth-child(3){ transition-delay: 120ms; }
+  .curriculum-item.reveal:nth-child(4){ transition-delay: 180ms; }
+  .curriculum-item.reveal:nth-child(5){ transition-delay: 240ms; }
+  .curriculum-item.reveal:nth-child(6){ transition-delay: 300ms; }
+  .usecase.reveal:nth-child(1){ transition-delay: 0ms; }
+  .usecase.reveal:nth-child(2){ transition-delay: 80ms; }
+  .usecase.reveal:nth-child(3){ transition-delay: 160ms; }
+  .usecase.reveal:nth-child(4){ transition-delay: 240ms; }
+  .usecase.reveal:nth-child(5){ transition-delay: 320ms; }
 
   @media (max-width: 860px){
     .hero .wrap{ grid-template-columns: 1fr; }
@@ -539,28 +594,28 @@
         <span class="eyebrow">o que você vai aprender</span>
         <h2>Do primeiro SKILL.md ao seu primeiro produto.</h2>
       </div>
-      <div class="curriculum reveal">
-        <div class="curriculum-item">
+      <div class="curriculum">
+        <div class="curriculum-item reveal">
           <span class="check">✓</span>
           <p><strong>Anatomia de uma Skill</strong> — o que é de verdade, e como ela é estruturada: SKILL.md, descriptions, arquivos de referência, scripts.</p>
         </div>
-        <div class="curriculum-item">
+        <div class="curriculum-item reveal">
           <span class="check">✓</span>
           <p><strong>Sua primeira Skill</strong> — como escrever uma do zero, com um exemplo completo, sem precisar programar.</p>
         </div>
-        <div class="curriculum-item">
+        <div class="curriculum-item reveal">
           <span class="check">✓</span>
           <p><strong>Descriptions que funcionam</strong> — como escrever a description que aciona sua Skill no momento certo: a habilidade mais importante do livro.</p>
         </div>
-        <div class="curriculum-item">
+        <div class="curriculum-item reveal">
           <span class="check">✓</span>
           <p><strong>Organização e versionamento</strong> — como nomear, organizar e versionar suas Skills à medida que sua coleção cresce.</p>
         </div>
-        <div class="curriculum-item">
+        <div class="curriculum-item reveal">
           <span class="check">✓</span>
           <p><strong>5 casos de uso completos</strong> — prontos para adaptar ao seu negócio (veja abaixo).</p>
         </div>
-        <div class="curriculum-item">
+        <div class="curriculum-item reveal">
           <span class="check">✓</span>
           <p><strong>Empacotar e monetizar</strong> — como empacotar Skills para sua equipe, e caminhos realistas para transformá-las em produto.</p>
         </div>
@@ -574,32 +629,32 @@
         <span class="eyebrow">prontos para adaptar</span>
         <h2>5 casos de uso reais, do primeiro capítulo à prática.</h2>
       </div>
-      <div class="usecases reveal">
-        <div class="usecase">
+      <div class="usecases">
+        <div class="usecase reveal">
           <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.9-.94L3 21l1.6-4.8A8.4 8.4 0 0 1 3.5 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5Z"/></svg></span>
           <span class="idx">01</span>
           <h3>Atendimento ao Cliente</h3>
           <p>Skill que responde dúvidas seguindo o tom de voz e as políticas da sua empresa.</p>
         </div>
-        <div class="usecase">
+        <div class="usecase reveal">
           <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg></span>
           <span class="idx">02</span>
           <h3>Geração de Relatórios</h3>
           <p>Transforme dados soltos em relatórios prontos, no formato que seu time já usa.</p>
         </div>
-        <div class="usecase">
+        <div class="usecase reveal">
           <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5"/><path d="m9 15 2 2 4-4"/></svg></span>
           <span class="idx">03</span>
           <h3>Revisão de Documentos</h3>
           <p>Da revisão de contratos a documentos internos, com critérios consistentes.</p>
         </div>
-        <div class="usecase">
+        <div class="usecase reveal">
           <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 13v-2Z"/><path d="M7 13v5a2 2 0 0 0 2 2h1v-6"/></svg></span>
           <span class="idx">04</span>
           <h3>Marketing e Redes Sociais</h3>
           <p>Conteúdo no tom da sua marca, sem reexplicar o briefing toda vez.</p>
         </div>
-        <div class="usecase">
+        <div class="usecase reveal">
           <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></span>
           <span class="idx">05</span>
           <h3>Produtividade Pessoal</h3>
@@ -646,6 +701,16 @@
     }catch(err){
       document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
     }
+
+    try{
+      var header = document.querySelector('header');
+      var onScroll = function(){
+        if(window.scrollY > 12){ header.classList.add('scrolled'); }
+        else{ header.classList.remove('scrolled'); }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }catch(err){}
   })();
 </script>
 </html>
