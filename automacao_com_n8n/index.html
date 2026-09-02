@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8" />
+<title>Automação com n8n | Renato Luis da Silva</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Do zero ao seu primeiro fluxo inteligente, sem precisar programar. Guia prático de n8n — conecte apps reais, use IA nos seus fluxos e pare de fazer manualmente o que um sistema pode fazer por você." />
+<link rel="canonical" href="https://livrosrenato.com.br/automacao_com_n8n/" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="book" />
+<meta property="og:site_name" content="Renato Luis da Silva" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:title" content="Automação com n8n: Do Zero ao Seu Primeiro Fluxo Inteligente" />
+<meta property="og:description" content="O guia definitivo para quem nunca automatizou nada: conecte apps reais, use lógica condicional e IA nos seus fluxos, sem precisar programar." />
+<meta property="og:image" content="https://livrosrenato.com.br/assets/covers/automacao-com-n8n-hero.jpg" />
+<meta property="og:url" content="https://livrosrenato.com.br/automacao_com_n8n/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Automação com n8n: Do Zero ao Seu Primeiro Fluxo Inteligente" />
+<meta name="twitter:description" content="O guia definitivo para quem nunca automatizou nada: conecte apps reais, use lógica condicional e IA nos seus fluxos, sem precisar programar." />
+<meta name="twitter:image" content="https://livrosrenato.com.br/assets/covers/automacao-com-n8n-hero.jpg" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Book","name":"Automação com n8n: Do Zero ao Seu Primeiro Fluxo Inteligente","author":{"@type":"Person","name":"Renato Luis da Silva"},"description":"O guia definitivo para quem nunca automatizou nada: conecte apps reais, use lógica condicional e IA nos seus fluxos, sem precisar programar.","image":"https://livrosrenato.com.br/assets/covers/automacao-com-n8n-hero.jpg","url":"https://livrosrenato.com.br/automacao_com_n8n/","bookFormat":"https://schema.org/EBook","inLanguage":"pt-BR","numberOfPages":"98","genre":"Automação"}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-195M4NH3N2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-195M4NH3N2');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #060b16;
+    --surface: #0d1626;
+    --surface-2: #121e34;
+    --hairline: #22314d;
+    --accent: #22d3ee;
+    --accent-bright: #67e8f9;
+    --teal: #fb923c;
+    --ivory: #eef6fb;
+    --body-text: #c3d0e0;
+    --muted: #8695ab;
+    --faint: #526080;
+    --font-display: "Sora", "Segoe UI", sans-serif;
+    --font-body: "Inter", "Segoe UI", sans-serif;
+    --font-label: "Inter", "Segoe UI", sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--body-text);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 56px);
+  }
+
+  .glow-bg{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(720px 440px at 84% -6%, rgba(34,211,238,0.16), transparent),
+      radial-gradient(560px 380px at 2% 34%, rgba(251,146,60,0.1), transparent);
+  }
+
+  .eyebrow{
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+  }
+  .eyebrow::before{ content: ""; width: 22px; height: 2px; background: var(--accent); border-radius: 2px; }
+
+  /* header */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 22px 0;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: background 320ms ease, border-color 320ms ease, backdrop-filter 320ms ease, padding 240ms ease;
+  }
+  header.scrolled{
+    padding: 14px 0;
+    background: rgba(6,11,22,0.76);
+    border-bottom: 1px solid var(--hairline);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 8px 32px -16px rgba(0,0,0,0.5);
+  }
+  header .wrap{ display: flex; align-items: center; justify-content: space-between; }
+  .wordmark{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--ivory);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .wordmark .dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .header-cta{
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    padding: 9px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 180ms ease, color 180ms ease, transform 180ms ease, background 180ms ease;
+  }
+  .header-cta:hover{
+    border-color: var(--accent);
+    color: var(--accent-bright);
+    background: rgba(34,211,238,0.1);
+    transform: translateY(-1px);
+  }
+  @media (max-width: 600px){ .header-cta{ display: none; } }
+
+  /* hero */
+  .hero{ position: relative; z-index: 2; padding: clamp(24px, 5vw, 48px) 0 clamp(56px, 9vw, 96px); }
+  .hero .wrap{
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.8fr);
+    gap: clamp(32px, 6vw, 72px);
+    align-items: center;
+  }
+  .hero h1{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    line-height: 1.16;
+    letter-spacing: -0.01em;
+    margin: 18px 0 0;
+    color: var(--ivory);
+    text-wrap: balance;
+  }
+  .hero h1 .hl{
+    background: linear-gradient(90deg, var(--accent-bright), var(--teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.lede{
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: var(--body-text);
+    max-width: 48ch;
+    margin: 22px 0 0;
+  }
+  .hero p.lede strong{ color: var(--ivory); font-weight: 700; }
+
+  .cta{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-top: 32px;
+    padding: 16px 30px;
+    background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+    color: #032028;
+    font-family: var(--font-label);
+    font-size: 0.94rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 14px 34px -14px rgba(34,211,238,0.5);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .cta:hover{ transform: translateY(-2px) scale(1.03); box-shadow: 0 20px 44px -14px rgba(34,211,238,0.72); }
+  .cta:active{ transform: translateY(0) scale(0.98); }
+  .cta .arrow{ transition: transform 180ms ease; }
+  .cta:hover .arrow{ transform: translateX(3px); }
+
+  .hero-sub{ margin-top: 14px; font-size: 0.86rem; color: var(--faint); }
+
+  .stat-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-top: 44px;
+    padding-top: 26px;
+    border-top: 1px solid var(--hairline);
+  }
+  .stat-row .stat .n{ font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--ivory); line-height: 1; }
+  .stat-row .stat .l{ display: block; margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+
+  .hero-cover{ position: relative; }
+  .hero-cover-glow{
+    position: absolute;
+    inset: -14%;
+    z-index: 0;
+    background: radial-gradient(closest-side, rgba(34,211,238,0.28), transparent 70%);
+    filter: blur(24px);
+  }
+  .hero-cover img{
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    border: 1px solid var(--hairline);
+    box-shadow: 0 50px 90px -30px rgba(0,0,0,0.7);
+    transition: transform 320ms ease, box-shadow 320ms ease;
+  }
+  .hero-cover:hover img{ transform: translateY(-4px); box-shadow: 0 60px 100px -28px rgba(0,0,0,0.75); }
+
+  /* hook */
+  .hook{ position: relative; z-index: 2; padding: clamp(28px, 6vw, 56px) 0; border-top: 1px solid var(--hairline); }
+  .hook .wrap{ max-width: 780px; }
+  .hook p{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    line-height: 1.5;
+    color: var(--ivory);
+    text-wrap: balance;
+  }
+  .hook p .accent{ color: var(--teal); }
+
+  /* sections */
+  section.block{ position: relative; z-index: 2; padding: clamp(48px, 8vw, 88px) 0; }
+  .block-head{ max-width: 640px; margin: 0 auto 44px; text-align: center; }
+  .block-head h2{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    margin: 16px 0 0;
+    color: var(--ivory);
+  }
+
+  /* curriculum checklist */
+  .curriculum{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .curriculum-item{
+    background: var(--surface);
+    padding: 26px 28px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: background 200ms ease;
+  }
+  .curriculum-item:hover{ background: var(--surface-2); }
+  .curriculum-item:hover .check{ background: rgba(34,211,238,0.24); transform: scale(1.06); }
+  .curriculum-item .check{
+    flex: none;
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: rgba(34,211,238,0.14);
+    border: 1px solid rgba(34,211,238,0.4);
+    color: var(--accent-bright);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    transition: background 200ms ease, transform 200ms ease;
+  }
+  .curriculum-item p{ margin: 0; color: var(--body-text); font-size: 0.98rem; line-height: 1.6; }
+  .curriculum-item p strong{ color: var(--ivory); }
+  @media (max-width: 760px){ .curriculum{ grid-template-columns: 1fr; } }
+
+  /* identify grid */
+  .usecases{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+  }
+  .usecase{
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 26px 22px;
+    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  }
+  .usecase:hover{
+    border-color: var(--accent);
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 20px 40px -22px rgba(34,211,238,0.35);
+    background: var(--surface-2);
+  }
+  .usecase-icon{
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(34,211,238,0.12);
+    border: 1px solid rgba(34,211,238,0.32);
+    color: var(--accent-bright);
+    margin-bottom: 14px;
+    transition: transform 220ms ease, background 220ms ease;
+  }
+  .usecase:hover .usecase-icon{ transform: scale(1.08) rotate(-4deg); background: rgba(34,211,238,0.2); }
+  .usecase-icon svg{ width: 22px; height: 22px; }
+  .usecase h3{ font-family: var(--font-display); font-weight: 600; font-size: 1.06rem; margin: 0; color: var(--ivory); }
+  .usecase p{ margin: 8px 0 0; font-size: 0.92rem; color: var(--muted); line-height: 1.6; }
+
+  /* reassurance */
+  .reassure{
+    background: linear-gradient(150deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    padding: clamp(32px, 6vw, 56px);
+    text-align: center;
+  }
+  .reassure .badge{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.8rem; font-weight: 600;
+    color: var(--teal);
+    background: rgba(251,146,60,0.1);
+    border: 1px solid rgba(251,146,60,0.3);
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+  .reassure h2{ font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 2.8vw, 2rem); color: var(--ivory); margin: 20px 0 0; }
+  .reassure p{ max-width: 62ch; margin: 16px auto 0; color: var(--body-text); font-size: 1.03rem; }
+
+  /* final cta */
+  .final-cta{ text-align: center; padding-bottom: clamp(64px, 10vw, 112px); }
+  .final-cover{
+    width: 128px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+    box-shadow: 0 20px 40px -18px rgba(0,0,0,0.6);
+    margin: 0 0 28px;
+    transition: transform 260ms ease, box-shadow 260ms ease;
+  }
+  .final-cover:hover{ transform: translateY(-4px) scale(1.04); box-shadow: 0 26px 50px -18px rgba(34,211,238,0.35); }
+  .final-cta p.closing{
+    max-width: 60ch;
+    margin: 0 auto;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    color: var(--ivory);
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+  .final-cta .author{ margin-top: 24px; font-size: 0.86rem; color: var(--muted); }
+  .final-cta .author strong{ color: var(--accent-bright); }
+
+  footer{
+    position: relative; z-index: 2;
+    padding: 30px 0 50px;
+    text-align: center;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.78rem;
+    color: var(--faint);
+  }
+
+  .reveal{ opacity: 0; transform: translateY(24px); transition: opacity 700ms cubic-bezier(.16,.8,.3,1), transform 700ms cubic-bezier(.16,.8,.3,1); }
+  .reveal.in{ opacity: 1; transform: none; }
+  .curriculum-item.reveal:nth-child(1){ transition-delay: 0ms; }
+  .curriculum-item.reveal:nth-child(2){ transition-delay: 60ms; }
+  .curriculum-item.reveal:nth-child(3){ transition-delay: 120ms; }
+  .curriculum-item.reveal:nth-child(4){ transition-delay: 180ms; }
+  .curriculum-item.reveal:nth-child(5){ transition-delay: 240ms; }
+  .curriculum-item.reveal:nth-child(6){ transition-delay: 300ms; }
+  .usecase.reveal:nth-child(1){ transition-delay: 0ms; }
+  .usecase.reveal:nth-child(2){ transition-delay: 80ms; }
+  .usecase.reveal:nth-child(3){ transition-delay: 160ms; }
+  .usecase.reveal:nth-child(4){ transition-delay: 240ms; }
+  .usecase.reveal:nth-child(5){ transition-delay: 320ms; }
+  .usecase.reveal:nth-child(6){ transition-delay: 400ms; }
+
+  @media (max-width: 860px){
+    .hero .wrap{ grid-template-columns: 1fr; }
+    .hero-cover{ order: -1; max-width: 320px; margin: 0 auto; }
+  }
+</style>
+
+<div class="glow-bg"></div>
+
+<header>
+  <div class="wrap">
+    <a class="wordmark" href="/"><span class="dot"></span> Renato Luis da Silva</a>
+    <a class="header-cta" href="https://link.amazon/B07F54DWw" target="_blank" rel="noopener">Ver na Amazon</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">guia prático — zero experiência necessária</span>
+        <h1>Pare de fazer na mão <span class="hl">o que um sistema pode fazer por você.</span></h1>
+        <p class="lede">Você já perdeu tempo copiando dados de planilha, respondendo a mesma pergunta pela quinta vez, ou esquecendo de enviar aquele relatório de segunda? O guia definitivo para quem nunca automatizou nada, usando <strong>n8n</strong> — a alternativa visual, flexível e mais barata ao Zapier e ao Make.</p>
+        <a class="cta" href="https://link.amazon/B07F54DWw" target="_blank" rel="noopener">Ver na Amazon <span class="arrow">→</span></a>
+        <div class="hero-sub">disponível em eBook Kindle</div>
+        <div class="stat-row">
+          <div class="stat"><span class="n">98</span><span class="l">PÁGINAS</span></div>
+          <div class="stat"><span class="n">5</span><span class="l">ÁREAS DE APLICAÇÃO</span></div>
+          <div class="stat"><span class="n">PT·EN·ES</span><span class="l">EDIÇÃO</span></div>
+        </div>
+      </div>
+
+      <div class="hero-cover reveal">
+        <div class="hero-cover-glow"></div>
+        <img src="../assets/covers/automacao-com-n8n-hero.jpg" alt="Capa do livro Automação com n8n, de Renato Luis da Silva" loading="eager" width="1500" height="2235" />
+      </div>
+    </div>
+  </section>
+
+  <section class="hook">
+    <div class="wrap reveal">
+      <p>n8n é a plataforma de automação visual de código aberto que está conquistando quem busca alternativas mais flexíveis — <span class="accent">e você não precisa saber programar</span> para usar.</p>
+    </div>
+  </section>
+
+  <section class="block" id="curriculo">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <span class="eyebrow">o que você vai aprender</span>
+        <h2>Do primeiro nó ao seu primeiro fluxo com IA embutida.</h2>
+      </div>
+      <div class="curriculum">
+        <div class="curriculum-item reveal">
+          <span class="check">✓</span>
+          <p><strong>O que é automação</strong> — e como identificar as tarefas certas para automatizar primeiro.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">✓</span>
+          <p><strong>Como o n8n funciona</strong> — nós, conexões, gatilhos e o caminho dos dados dentro de um fluxo.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">✓</span>
+          <p><strong>n8n vs Zapier vs Make</strong> — qual escolher e por quê.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">✓</span>
+          <p><strong>Seu primeiro fluxo completo</strong> — passo a passo do zero até ativado, conectando apps reais via API.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">✓</span>
+          <p><strong>Lógica condicional e loops</strong> — processamento em lote e tratamento de erros, os fundamentos de uma automação confiável.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">✓</span>
+          <p><strong>IA dentro dos seus fluxos</strong> — incluindo agentes capazes de decidir sozinhos quais ações tomar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="identifica">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <span class="eyebrow">para quem é esse livro</span>
+        <h2>Seis sinais de que este livro foi escrito para você.</h2>
+      </div>
+      <div class="usecases">
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 15h6"/></svg></span>
+          <h3>Copia dados de planilha toda semana</h3>
+          <p>O mesmo dado, de um sistema para outro, na mão, todo santo dia.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.9-.94L3 21l1.6-4.8A8.4 8.4 0 0 1 3.5 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5Z"/></svg></span>
+          <h3>Responde a mesma pergunta 5ª vez</h3>
+          <p>Sempre a mesma dúvida, de clientes diferentes, com a mesma resposta.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <h3>Esquece o relatório de segunda</h3>
+          <p>Toda semana a mesma correria de última hora pra montar e enviar.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-5Z"/></svg></span>
+          <h3>Achou o Zapier caro ou limitado</h3>
+          <p>Já ouviu falar de automação, mas o preço ou os limites travaram você.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1"/><path d="M9 11V9a4 4 0 0 1 8 0v2"/><path d="M9 11h8v8H9z"/></svg></span>
+          <h3>Acha que automação é "coisa de programador"</h3>
+          <p>Nunca escreveu uma linha de código e achou que isso te deixava de fora.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></span>
+          <h3>Quer usar IA além do chat</h3>
+          <p>Quer que a inteligência artificial tome decisões dentro dos seus processos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="reassure reveal">
+        <span class="badge">● sem experiência prévia necessária</span>
+        <h2>Não precisa saber programar.</h2>
+        <p>Não é necessária nenhuma experiência prévia com programação. Cada conceito é explicado em linguagem simples, com exemplos práticos e um template de fluxo pronto para importar direto no seu n8n.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="wrap reveal">
+      <img class="final-cover" src="../assets/covers/automacao-com-n8n-thumb.jpg" alt="Capa do livro Automação com n8n, de Renato Luis da Silva" width="640" height="953" />
+      <p class="closing">Se você quer parar de fazer manualmente o que um sistema pode fazer por você, este livro te dá o caminho completo, do zero ao seu primeiro fluxo inteligente.</p>
+      <a class="cta" href="https://link.amazon/B07F54DWw" target="_blank" rel="noopener">Ver na Amazon <span class="arrow">→</span></a>
+      <div class="author">por <strong>Renato Luis da Silva</strong></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Automação com n8n — eBook Kindle
+</footer>
+
+<script>
+  (function(){
+    try{
+      var els = document.querySelectorAll('.reveal');
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function(el){ io.observe(el); });
+    }catch(err){
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+
+    try{
+      var header = document.querySelector('header');
+      var onScroll = function(){
+        if(window.scrollY > 12){ header.classList.add('scrolled'); }
+        else{ header.classList.remove('scrolled'); }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }catch(err){}
+  })();
+</script>
+</html>

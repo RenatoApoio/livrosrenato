@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8" />
+<title>Segurança de Banco de Dados | Renato Luis da Silva</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="O guia definitivo para DBAs, arquitetos e engenheiros de segurança: defesa em profundidade, criptografia, hardening multi-SGBD e compliance LGPD/GDPR, com checklists e scripts de auditoria." />
+<link rel="canonical" href="https://livrosrenato.com.br/seguranca_de_banco_de_dados/" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="book" />
+<meta property="og:site_name" content="Renato Luis da Silva" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:title" content="Segurança de Banco de Dados: O Guia Definitivo para Especialistas" />
+<meta property="og:description" content="Defesa em profundidade, criptografia, hardening multi-SGBD e compliance (LGPD/GDPR) para DBAs, arquitetos e engenheiros de segurança — com checklists e scripts de auditoria prontos para aplicar." />
+<meta property="og:image" content="https://livrosrenato.com.br/assets/covers/seguranca-de-banco-de-dados-hero.jpg" />
+<meta property="og:url" content="https://livrosrenato.com.br/seguranca_de_banco_de_dados/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Segurança de Banco de Dados: O Guia Definitivo para Especialistas" />
+<meta name="twitter:description" content="Defesa em profundidade, criptografia, hardening multi-SGBD e compliance (LGPD/GDPR) para DBAs, arquitetos e engenheiros de segurança — com checklists e scripts de auditoria prontos para aplicar." />
+<meta name="twitter:image" content="https://livrosrenato.com.br/assets/covers/seguranca-de-banco-de-dados-hero.jpg" />
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Book","name":"Segurança de Banco de Dados: O Guia Definitivo para Especialistas","author":{"@type":"Person","name":"Renato Luis da Silva"},"description":"Um guia técnico avançado, agnóstico de SGBD, escrito para quem já opera bancos de dados em produção e precisa fechar lacunas reais de segurança: DBAs, arquitetos de dados, engenheiros de segurança e líderes técnicos.","image":"https://livrosrenato.com.br/assets/covers/seguranca-de-banco-de-dados-hero.jpg","url":"https://livrosrenato.com.br/seguranca_de_banco_de_dados/","bookFormat":"https://schema.org/EBook","inLanguage":"pt-BR","numberOfPages":"165","genre":"Segurança da Informação"}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-195M4NH3N2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-195M4NH3N2');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #050a12;
+    --surface: #0b1420;
+    --surface-2: #101c2c;
+    --hairline: #1f3348;
+    --accent: #38bdf8;
+    --accent-bright: #7dd3fc;
+    --teal: #eab308;
+    --ivory: #eaf2fb;
+    --body-text: #b9c7db;
+    --muted: #7e8ba3;
+    --faint: #4a5773;
+    --font-display: "IBM Plex Sans", "Segoe UI", sans-serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--body-text);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 56px);
+  }
+
+  .glow-bg{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(720px 440px at 84% -6%, rgba(56,189,248,0.16), transparent),
+      radial-gradient(560px 380px at 2% 34%, rgba(234,179,8,0.06), transparent);
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--accent-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  .eyebrow::before{ content: "//"; color: var(--faint); }
+
+  /* header */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 22px 0;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: background 320ms ease, border-color 320ms ease, backdrop-filter 320ms ease, padding 240ms ease;
+  }
+  header.scrolled{
+    padding: 14px 0;
+    background: rgba(5,10,18,0.78);
+    border-bottom: 1px solid var(--hairline);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 8px 32px -16px rgba(0,0,0,0.5);
+  }
+  header .wrap{ display: flex; align-items: center; justify-content: space-between; }
+  .wordmark{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ivory);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .wordmark .dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .header-cta{
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    padding: 9px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 180ms ease, color 180ms ease, transform 180ms ease, background 180ms ease;
+  }
+  .header-cta:hover{
+    border-color: var(--accent);
+    color: var(--accent-bright);
+    background: rgba(56,189,248,0.08);
+    transform: translateY(-1px);
+  }
+  @media (max-width: 600px){ .header-cta{ display: none; } }
+
+  /* hero */
+  .hero{ position: relative; z-index: 2; padding: clamp(24px, 5vw, 48px) 0 clamp(56px, 9vw, 96px); }
+  .hero .wrap{
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.78fr);
+    gap: clamp(32px, 6vw, 72px);
+    align-items: center;
+  }
+  .hero h1{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 18px 0 0;
+    color: var(--ivory);
+    text-wrap: balance;
+  }
+  .hero h1 .hl{
+    background: linear-gradient(90deg, var(--accent-bright), var(--teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.lede{
+    font-size: 1.08rem;
+    line-height: 1.65;
+    color: var(--body-text);
+    max-width: 50ch;
+    margin: 22px 0 0;
+  }
+  .hero p.lede strong{ color: var(--ivory); font-weight: 700; }
+
+  .cta{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-top: 32px;
+    padding: 16px 30px;
+    background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+    color: #041521;
+    font-family: var(--font-display);
+    font-size: 0.94rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 14px 34px -14px rgba(56,189,248,0.5);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .cta:hover{ transform: translateY(-2px) scale(1.03); box-shadow: 0 20px 44px -14px rgba(56,189,248,0.72); }
+  .cta:active{ transform: translateY(0) scale(0.98); }
+  .cta .arrow{ transition: transform 180ms ease; }
+  .cta:hover .arrow{ transform: translateX(3px); }
+
+  .hero-sub{ margin-top: 14px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint); }
+
+  .stat-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-top: 44px;
+    padding-top: 26px;
+    border-top: 1px solid var(--hairline);
+  }
+  .stat-row .stat .n{ font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--ivory); line-height: 1; }
+  .stat-row .stat .l{ display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--faint); }
+
+  .hero-cover{ position: relative; }
+  .hero-cover-glow{
+    position: absolute;
+    inset: -14%;
+    z-index: 0;
+    background: radial-gradient(closest-side, rgba(56,189,248,0.28), transparent 70%);
+    filter: blur(24px);
+  }
+  .hero-cover img{
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--hairline);
+    box-shadow: 0 50px 90px -30px rgba(0,0,0,0.7);
+    transition: transform 320ms ease, box-shadow 320ms ease;
+  }
+  .hero-cover:hover img{ transform: translateY(-4px); box-shadow: 0 60px 100px -28px rgba(0,0,0,0.75); }
+
+  /* hook */
+  .hook{ position: relative; z-index: 2; padding: clamp(28px, 6vw, 56px) 0; border-top: 1px solid var(--hairline); }
+  .hook .wrap{ max-width: 780px; }
+  .hook p{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2.3vw, 1.5rem);
+    line-height: 1.55;
+    color: var(--ivory);
+    text-wrap: balance;
+  }
+  .hook p .accent{ color: var(--accent-bright); }
+
+  /* sections */
+  section.block{ position: relative; z-index: 2; padding: clamp(48px, 8vw, 88px) 0; }
+  .block-head{ max-width: 660px; margin: 0 auto 44px; text-align: center; }
+  .block-head h2{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    margin: 16px 0 0;
+    color: var(--ivory);
+  }
+
+  /* curriculum checklist */
+  .curriculum{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .curriculum-item{
+    background: var(--surface);
+    padding: 26px 28px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: background 200ms ease;
+  }
+  .curriculum-item:hover{ background: var(--surface-2); }
+  .curriculum-item:hover .check{ background: rgba(56,189,248,0.24); transform: scale(1.06); }
+  .curriculum-item .check{
+    flex: none;
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    background: rgba(56,189,248,0.14);
+    border: 1px solid rgba(56,189,248,0.4);
+    color: var(--accent-bright);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    margin-top: 2px;
+    transition: background 200ms ease, transform 200ms ease;
+  }
+  .curriculum-item p{ margin: 0; color: var(--body-text); font-size: 0.96rem; line-height: 1.6; }
+  .curriculum-item p strong{ color: var(--ivory); }
+  @media (max-width: 760px){ .curriculum{ grid-template-columns: 1fr; } }
+
+  /* identify grid */
+  .usecases{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+  }
+  .usecase{
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 26px 22px;
+    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  }
+  .usecase:hover{
+    border-color: var(--accent);
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 20px 40px -22px rgba(56,189,248,0.35);
+    background: var(--surface-2);
+  }
+  .usecase-icon{
+    display: flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    background: rgba(56,189,248,0.12);
+    border: 1px solid rgba(56,189,248,0.32);
+    color: var(--accent-bright);
+    margin-bottom: 14px;
+    transition: transform 220ms ease, background 220ms ease;
+  }
+  .usecase:hover .usecase-icon{ transform: scale(1.08) rotate(-4deg); background: rgba(56,189,248,0.2); }
+  .usecase-icon svg{ width: 21px; height: 21px; }
+  .usecase h3{ font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; margin: 0; color: var(--ivory); }
+  .usecase p{ margin: 8px 0 0; font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+  /* reassurance */
+  .reassure{
+    background: linear-gradient(150deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: clamp(32px, 6vw, 56px);
+    text-align: center;
+  }
+  .reassure .badge{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--teal);
+    background: rgba(234,179,8,0.1);
+    border: 1px solid rgba(234,179,8,0.3);
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+  .reassure h2{ font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 1.9rem); color: var(--ivory); margin: 20px 0 0; }
+  .reassure p{ max-width: 64ch; margin: 16px auto 0; color: var(--body-text); font-size: 1.01rem; }
+
+  /* final cta */
+  .final-cta{ text-align: center; padding-bottom: clamp(64px, 10vw, 112px); }
+  .final-cover{
+    width: 124px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+    box-shadow: 0 20px 40px -18px rgba(0,0,0,0.6);
+    margin: 0 0 28px;
+    transition: transform 260ms ease, box-shadow 260ms ease;
+  }
+  .final-cover:hover{ transform: translateY(-4px) scale(1.04); box-shadow: 0 26px 50px -18px rgba(56,189,248,0.32); }
+  .final-cta p.closing{
+    max-width: 62ch;
+    margin: 0 auto;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.15rem, 2.1vw, 1.4rem);
+    color: var(--ivory);
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+  .final-cta .author{ margin-top: 24px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .final-cta .author strong{ color: var(--accent-bright); }
+
+  footer{
+    position: relative; z-index: 2;
+    padding: 30px 0 50px;
+    text-align: center;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--faint);
+  }
+
+  .reveal{ opacity: 0; transform: translateY(24px); transition: opacity 700ms cubic-bezier(.16,.8,.3,1), transform 700ms cubic-bezier(.16,.8,.3,1); }
+  .reveal.in{ opacity: 1; transform: none; }
+  .curriculum-item.reveal:nth-child(1){ transition-delay: 0ms; }
+  .curriculum-item.reveal:nth-child(2){ transition-delay: 60ms; }
+  .curriculum-item.reveal:nth-child(3){ transition-delay: 120ms; }
+  .curriculum-item.reveal:nth-child(4){ transition-delay: 180ms; }
+  .curriculum-item.reveal:nth-child(5){ transition-delay: 240ms; }
+  .curriculum-item.reveal:nth-child(6){ transition-delay: 300ms; }
+  .usecase.reveal:nth-child(1){ transition-delay: 0ms; }
+  .usecase.reveal:nth-child(2){ transition-delay: 80ms; }
+  .usecase.reveal:nth-child(3){ transition-delay: 160ms; }
+  .usecase.reveal:nth-child(4){ transition-delay: 240ms; }
+  .usecase.reveal:nth-child(5){ transition-delay: 320ms; }
+  .usecase.reveal:nth-child(6){ transition-delay: 400ms; }
+
+  @media (max-width: 860px){
+    .hero .wrap{ grid-template-columns: 1fr; }
+    .hero-cover{ order: -1; max-width: 300px; margin: 0 auto; }
+  }
+</style>
+
+<div class="glow-bg"></div>
+
+<header>
+  <div class="wrap">
+    <a class="wordmark" href="/"><span class="dot"></span> Renato Luis da Silva</a>
+    <a class="header-cta" href="https://link.amazon/B0bnc8mPM" target="_blank" rel="noopener">Ver na Amazon</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">guia técnico avançado — agnóstico de SGBD</span>
+        <h1>O elo mais mal protegido da sua stack <span class="hl">não é o que você imagina.</span></h1>
+        <p class="lede">Bancos de dados guardam o ativo mais valioso da sua organização — e continuam sendo o elo mais mal protegido da cadeia de segurança. Escrito para quem já opera bancos em produção e precisa fechar <strong>lacunas reais</strong>: DBAs, arquitetos de dados, engenheiros de segurança e líderes técnicos.</p>
+        <a class="cta" href="https://link.amazon/B0bnc8mPM" target="_blank" rel="noopener">Ver na Amazon <span class="arrow">→</span></a>
+        <div class="hero-sub">$ disponível em eBook Kindle</div>
+        <div class="stat-row">
+          <div class="stat"><span class="n">165</span><span class="l">PÁGINAS</span></div>
+          <div class="stat"><span class="n">18</span><span class="l">CAPÍTULOS</span></div>
+          <div class="stat"><span class="n">PT·EN·ES</span><span class="l">EDIÇÃO</span></div>
+        </div>
+      </div>
+
+      <div class="hero-cover reveal">
+        <div class="hero-cover-glow"></div>
+        <img src="../assets/covers/seguranca-de-banco-de-dados-hero.jpg" alt="Capa do livro Segurança de Banco de Dados, de Renato Luis da Silva" loading="eager" width="992" height="1586" />
+      </div>
+    </div>
+  </section>
+
+  <section class="hook">
+    <div class="wrap reveal">
+      <p>Cada capítulo entrega um cenário de risco real, o conceito técnico que o resolve e uma aplicação prática imediata — <span class="accent">tabela comparativa, checklist ou script</span> pronto para adaptar ao seu ambiente.</p>
+    </div>
+  </section>
+
+  <section class="block" id="curriculo">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <span class="eyebrow">o que o livro cobre</span>
+        <h2>O ciclo de vida completo de um programa de segurança de dados.</h2>
+      </div>
+      <div class="curriculum">
+        <div class="curriculum-item reveal">
+          <span class="check">01</span>
+          <p><strong>Modelagem de ameaças</strong> — mapeie a superfície de ataque real do seu ambiente de dados.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">02</span>
+          <p><strong>Controle de acesso granular</strong> — RBAC, ABAC e Row-Level Security.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">03</span>
+          <p><strong>Criptografia em repouso e em trânsito</strong> — com gestão correta de chaves (KMS/HSM).</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">04</span>
+          <p><strong>Hardening multi-SGBD</strong> — PostgreSQL, MySQL, SQL Server, Oracle e os principais NoSQL.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">05</span>
+          <p><strong>Proteção em nuvem e containers</strong> — AWS RDS, Azure SQL, Cloud SQL.</p>
+        </div>
+        <div class="curriculum-item reveal">
+          <span class="check">06</span>
+          <p><strong>Auditoria, incidentes e compliance</strong> — detecção de anomalias, resposta a incidentes, LGPD e GDPR.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="identifica">
+    <div class="wrap">
+      <div class="block-head reveal">
+        <span class="eyebrow">para quem é esse livro</span>
+        <h2>Seis sinais de que este livro foi escrito para você.</h2>
+      </div>
+      <div class="usecases">
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
+          <h3>É DBA e sabe que "ficou pra depois"</h3>
+          <p>Administra o banco, mas a segurança nunca teve tempo dedicado de verdade.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-5Z"/></svg></span>
+          <h3>Arquiteto migrando para a nuvem</h3>
+          <p>Está montando (ou já montou) o ambiente de dados em AWS, Azure ou GCP.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/></svg></span>
+          <h3>Engenheiro de segurança sem fundo em BD</h3>
+          <p>Domina segurança, mas bancos de dados são um ponto cego específico.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+          <h3>Precisa hardening em mais de um SGBD</h3>
+          <p>Não é só um banco — é um ambiente misto que precisa de padrão consistente.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span>
+          <h3>Foi cobrado sobre LGPD/GDPR</h3>
+          <p>E precisa alinhar a arquitetura de dados sem paralisar o time de engenharia.</p>
+        </div>
+        <div class="usecase reveal">
+          <span class="usecase-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <h3>Cansado de slides genéricos de fornecedor</h3>
+          <p>Quer conceito técnico de verdade, com script e checklist para aplicar hoje.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="reassure reveal">
+        <span class="badge">● scripts de auditoria prontos para os principais SGBDs</span>
+        <h2>O guia que faltava na sua estante.</h2>
+        <p>Os apêndices trazem um glossário completo, uma bateria de scripts de auditoria prontos para os principais SGBDs e um roteiro de referências para aprofundamento. Se você já sabe operar um banco de dados e agora precisa protegê-lo de verdade — sem depender de slides genéricos de fornecedor — este é o guia que faltava na sua estante.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="wrap reveal">
+      <img class="final-cover" src="../assets/covers/seguranca-de-banco-de-dados-thumb.jpg" alt="Capa do livro Segurança de Banco de Dados, de Renato Luis da Silva" width="640" height="1023" />
+      <p class="closing">Defesa em profundidade, criptografia, hardening multi-SGBD e compliance — com checklists e scripts de auditoria prontos para aplicar no seu ambiente.</p>
+      <a class="cta" href="https://link.amazon/B0bnc8mPM" target="_blank" rel="noopener">Ver na Amazon <span class="arrow">→</span></a>
+      <div class="author">por <strong>Renato Luis da Silva</strong></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Segurança de Banco de Dados — eBook Kindle
+</footer>
+
+<script>
+  (function(){
+    try{
+      var els = document.querySelectorAll('.reveal');
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function(el){ io.observe(el); });
+    }catch(err){
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+
+    try{
+      var header = document.querySelector('header');
+      var onScroll = function(){
+        if(window.scrollY > 12){ header.classList.add('scrolled'); }
+        else{ header.classList.remove('scrolled'); }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }catch(err){}
+  })();
+</script>
+</html>
